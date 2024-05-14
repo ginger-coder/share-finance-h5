@@ -80,7 +80,8 @@ const loginParams = reactive({
     account: '',
     password: '',
     repassword: '',
-    names: ''
+    names: '',
+    code: ''
 });
 
 const onFinish = () => {
@@ -98,6 +99,10 @@ const onRegister = () => {
     }
     if (!isRead.value) {
         showToast('请勾选阅读并同意《用户协议》和《隐私政策》');
+        return false;
+    }
+    if (!loginParams.code) {
+        showToast('请输入短信验证码');
         return false;
     }
     isLoading.value = true;

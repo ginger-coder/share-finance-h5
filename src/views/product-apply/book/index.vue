@@ -15,7 +15,25 @@
         <div class="upload-box">
             <div class="upload-title align-center">申请材料</div>
             <div class="upload-content">
-                <van-uploader v-model="fileList" multiple :max-count="2" />
+                <div class="upload-card">
+                    <div class="upload-card-title">上传材料</div>
+                    <div class="upload-card-tip">支持上传文件为：pdf</div>
+                    <div class="upload-card-button">立即上传</div>
+                </div>
+                <div class="upload-file-box">
+                    <div class="upload-file-item">
+                        <div class="upload-file-icon">
+                            <img src="@/assets/images/icon-file.png" alt="" />
+                        </div>
+                        <div class="upload-file-content">
+                            <div class="file-name">文件名称</div>
+                            <div class="file-size">10M</div>
+                        </div>
+                        <div class="upload-file-delete">
+                            <img src="@/assets/images/icon-delete.png" alt="" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="footer-box">
@@ -112,7 +130,49 @@ onMounted(() => {
         }
     }
     .upload-content {
-        padding-top: 16px;
+        padding: 16px 0 12px;
+        .upload-card {
+            width: 100%;
+            background: url(@/assets/images/icon-upload-bg.png) no-repeat;
+            background-size: 100% auto;
+            padding: 15px;
+            .upload-card-title {
+                font-weight: 500;
+                font-size: 15px;
+                color: #333333;
+                margin-bottom: 2px;
+            }
+            .upload-card-tip {
+                font-weight: 400;
+                font-size: 11px;
+                color: #999999;
+                margin-bottom: 12px;
+            }
+            .upload-card-button {
+                width: 72px;
+                height: 25px;
+                box-shadow: 0px 2px 8px 0px rgba(44, 104, 253, 0.2);
+                border-radius: 15px;
+                border: 1px solid #8082a3;
+                line-height: 25px;
+                text-align: center;
+                font-weight: 500;
+                font-size: 12px;
+                color: #3526c9;
+                text-shadow: 0px 2px 8px rgba(44, 104, 253, 0.2);
+            }
+        }
+        .upload-file-box {
+            .upload-file-item {
+                background: rgba(244, 242, 249, 0.3);
+                border-radius: 6px;
+                border: 1px solid rgba(128, 130, 163, 0.2);
+                padding: 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
     }
 }
 </style>
