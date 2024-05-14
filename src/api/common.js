@@ -53,7 +53,7 @@ export const uploadFile2path = data => {
 };
 
 /**
- * 上传产品
+ * 项目详情
  */
 export const getProjectInfo = data => {
     return serviceAxios({
@@ -88,6 +88,16 @@ export const getOptionProjectList = data => {
 export const getApplyBackletterList = data => {
     return serviceAxios({
         url: '/console/apply_backletter/list',
+        method: 'GET',
+        params: data
+    });
+};
+/**
+ * 撤回
+ */
+export const applyBackletterReCall = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/re_call',
         method: 'GET',
         params: data
     });

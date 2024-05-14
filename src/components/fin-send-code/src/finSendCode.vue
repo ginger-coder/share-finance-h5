@@ -43,21 +43,24 @@ const emit = defineEmits(['on-finish', 'on-start']);
  */
 const countDown = ref(null);
 const isCountDown = ref(false);
-const falg = ref(true);
 const start = _.debounce(() => {
     if (!props.mobile) {
         showToast('请输入手机号');
         return;
     }
-    if (falg.value) {
+    if (!isCountDown.value) {
         api.sendSMS({
             mobile: props.mobile
-        }).then(() => {
-            showSuccessToast('验证码已发送');
-            isCountDown.value = true;
-            countDown.value.start();
-            emit('on-start');
-        });
+        })
+            .then(() => {
+                showSuccessToast('验证码已发送');
+                isCountDown.value = false;
+                countDown.value.start();
+                emit('on-start');
+            })
+            .catch(() => {
+                isCountDown.value = false;
+            });
     }
 });
 const reset = () => {

@@ -37,15 +37,28 @@
             >
                 立即申请
             </div>
-            <div v-if="props.from == 'history'" class="card-status">
-                <img src="@/assets/images/icon-pass.png" alt="" />
+            <div
+                v-if="
+                    props.from == 'history' &&
+                    (props.data.isauth == 1 ||
+                        props.data.isauth == 4 ||
+                        props.data.isauth == 8 ||
+                        props.data.isauth == 9)
+                "
+                class="card-status"
+            >
+                <img :src="'@/assets/images/' + icons[props.data.isauth] + '.png'" alt="" />
             </div>
         </div>
         <div class="card-footer-box flex-row justify-between align-center">
             <span class="card-footer-time">最近申请时间：2024.04.07</span>
             <span class="card-footer-company">{{ props.data.names }}</span>
         </div>
-        <div v-if="props.from == 'history'" class="card-iback-box" @click="onBackOrder">
+        <div
+            v-if="props.from == 'history' && props.data.isauth == 4"
+            class="card-iback-box"
+            @click="onBackOrder"
+        >
             <div class="iback-btn">撤销</div>
         </div>
     </fin-card>
@@ -55,6 +68,8 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
+import { showToast, showSuccessToast } from 'vant';
+import api from '@/api';
 const props = defineProps({
     data: {
         type: Object,
@@ -68,8 +83,18 @@ const props = defineProps({
     }
 });
 
+const icons = {
+    1: 'icon-pass',
+    4: 'icon-audit',
+    9: 'icon-reject',
+    8: 'icon-pay'
+};
+
 const onBackOrder = () => {
     // 撤销
+    api.applyBackletterReCall({ applyno: props.data.prodno }).then(() => {
+        showSuccessToast('撤销成功');
+    });
 };
 
 // eslint-disable-next-line camelcase
