@@ -19,9 +19,13 @@
                 type="password"
             />
             <van-field v-model="loginParams.names" placeholder="企业名称" />
-            <van-field clearable center placeholder="请输入短信验证码">
+            <van-field v-model="loginParams.code" clearable center placeholder="请输入短信验证码">
                 <template #button>
-                    <fin-send-code @on-finish="onFinish" />
+                    <fin-send-code
+                        ref="sendCodeEl"
+                        :mobile="loginParams.account"
+                        @on-finish="onFinish"
+                    />
                 </template>
             </van-field>
             <div class="read-book align-center">

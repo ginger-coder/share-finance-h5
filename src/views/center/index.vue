@@ -31,11 +31,8 @@
                     <div class="menu-tip">已通过申请</div>
                 </div>
             </div>
-            <div
-                class="content-list-box flex-row justify-around align-center"
-                @click="router.push('/project-list')"
-            >
-                <div class="content-list-item project-item">
+            <div class="content-list-box flex-row justify-around align-center">
+                <div class="content-list-item project-item" @click="router.push('/project-list')">
                     <div class="list-item-icon">
                         <img src="@/assets/images/center/icon-center-project.png" alt="" />
                     </div>

@@ -6,7 +6,7 @@
 <template>
     <div class="book-container flex-column">
         <van-field
-            v-model="projectValue"
+            v-model="projectLabel"
             is-link
             readonly
             placeholder="请选择要关联的项目"
@@ -22,7 +22,12 @@
             <fin-button submit-text="发起申请" class="submit" @click="onNext" />
         </div>
         <van-popup v-model:show="showPicker" round position="bottom">
-            <van-picker :columns="columns" @cancel="showPicker = false" @confirm="onConfirm" />
+            <van-picker
+                :columns-field-names="customFieldName"
+                :columns="columns"
+                @cancel="showPicker = false"
+                @confirm="onConfirm"
+            />
         </van-popup>
     </div>
 </template>
@@ -31,6 +36,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
+import api from '@/api';
 defineProps({});
 /**
  * 仓库
@@ -52,24 +58,29 @@ const router = useRouter();
 //  上传
 const fileList = ref([]);
 
-const columns = [
-    { text: '杭州', value: 'Hangzhou' },
-    { text: '宁波', value: 'Ningbo' },
-    { text: '温州', value: 'Wenzhou' },
-    { text: '绍兴', value: 'Shaoxing' },
-    { text: '湖州', value: 'Huzhou' }
-];
+const columns = ref([]);
 const showPicker = ref(false);
 const projectValue = ref('');
+const projectLabel = ref('');
 const onConfirm = value => {
-    console.log('value', value);
+    showPicker.value = false;
+    projectValue.value = value.selectedOptions[0].projno;
+    projectLabel.value = value.selectedOptions[0].names;
 };
 const onNext = () => {
     router.push('/product-apply/protocol');
 };
-
+const customFieldName = {
+    text: 'names',
+    value: 'projno'
+};
+const initProjectList = () => {
+    api.getOptionProjectList().then(res => {
+        columns.value = res.data.lists;
+    });
+};
 onMounted(() => {
-    //console.log('3.-组件挂载到页面之后执行-------onMounted')
+    initProjectList();
 });
 </script>
 <style scoped lang="scss">

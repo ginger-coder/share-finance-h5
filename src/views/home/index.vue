@@ -8,7 +8,7 @@
         <div class="banner">
             <div class="banner-title">服务大厅</div>
             <div class="banner-tip">共建安全可信的产业金融生态圈</div>
-            <div class="message-btn" @click="router.push('/message')">我的消息</div>
+            <div v-if="false" class="message-btn" @click="router.push('/message')">我的消息</div>
         </div>
         <div class="content flex_1">
             <div class="header flex-row justify-between">
@@ -21,9 +21,10 @@
                     <van-dropdown-item v-model="moneyValue" :options="typeOption" />
                 </van-dropdown-menu>
             </div>
-            <div class="scroll-box">
+            <div v-if="dataList.length" class="scroll-box">
                 <fin-project-card v-for="item in dataList" :key="item.prodno" :data="item" />
             </div>
+            <van-empty v-else description="暂无数据" />
         </div>
         <footer-view />
         <div class="badge-box" @click="router.push('/center')">
@@ -69,7 +70,7 @@ const typeOption = ref([
     { text: '销量排序', value: 'c' }
 ]);
 
-const dataList = ref();
+const dataList = ref([]);
 const initList = () => {
     api.getProductList().then(res => {
         dataList.value = res.data.lists;

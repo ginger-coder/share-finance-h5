@@ -80,8 +80,8 @@
         <fin-date-time-picker
             ref="popup"
             :values="dateTime"
-            @changeValue="dateVisible = false"
-            :showPicker="dateVisible"
+            :show-picker="dateVisible"
+            @change-value="dateVisible = false"
             @confirm="selectTime"
         />
     </div>
@@ -177,7 +177,6 @@ const handleSave = () => {
         return false;
     }
     productParams.margin_amount = marginAmount.value * 100;
-    console.log('productParams', productParams);
     api.projectCreate(productParams).then(res => {
         if (res.code === 0) {
             showToast('创建成功');

@@ -5,41 +5,44 @@
 -->
 <template>
     <div class="container bg-color">
-        <fin-card
-            v-for="(item, index) in list"
-            :key="index"
-            class="project-item"
-            @click="handleRouteInfo(item.projno)"
-        >
-            <div class="title align-center">
-                <div class="title-icon">
-                    <img src="@/assets/images/icon-project-tip.png" alt="" />
+        <template v-if="list.length > 0">
+            <fin-card
+                v-for="(item, index) in list"
+                :key="index"
+                class="project-item"
+                @click="handleRouteInfo(item.projno)"
+            >
+                <div class="title align-center">
+                    <div class="title-icon">
+                        <img src="@/assets/images/icon-project-tip.png" alt="" />
+                    </div>
+                    {{ item.names }}
                 </div>
-                {{ item.names }}
-            </div>
-            <div class="project-content">
-                <div class="project-content-item align-center flex-row">
-                    <div class="project-content-item-name">招标编号：</div>
-                    <div class="project-content-item-name">{{ item.tenderer_no }}</div>
-                </div>
-                <div class="project-content-item align-center flex-row">
-                    <div class="project-content-item-name">保证金金额：</div>
-                    <div class="project-content-item-name">
-                        {{ moneyFormat(item.margin_amount) }}
+                <div class="project-content">
+                    <div class="project-content-item align-center flex-row">
+                        <div class="project-content-item-name">招标编号：</div>
+                        <div class="project-content-item-name">{{ item.tenderer_no }}</div>
+                    </div>
+                    <div class="project-content-item align-center flex-row">
+                        <div class="project-content-item-name">保证金金额：</div>
+                        <div class="project-content-item-name">
+                            {{ moneyFormat(item.margin_amount) }}
+                        </div>
+                    </div>
+                    <div class="project-content-item align-center flex-row">
+                        <div class="project-content-item-name">招标单位：</div>
+                        <div class="project-content-item-name">{{ item.tenderer_unit }}</div>
+                    </div>
+                    <div class="project-content-item align-center flex-row">
+                        <div class="project-content-item-name">开标日期：</div>
+                        <div class="project-content-item-name">
+                            {{ timeFormat(item.date_bid_opening) }}
+                        </div>
                     </div>
                 </div>
-                <div class="project-content-item align-center flex-row">
-                    <div class="project-content-item-name">招标单位：</div>
-                    <div class="project-content-item-name">{{ item.tenderer_unit }}</div>
-                </div>
-                <div class="project-content-item align-center flex-row">
-                    <div class="project-content-item-name">开标日期：</div>
-                    <div class="project-content-item-name">
-                        {{ timeFormat(item.date_bid_opening) }}
-                    </div>
-                </div>
-            </div>
-        </fin-card>
+            </fin-card>
+        </template>
+        <van-empty v-else description="暂无数据" />
         <fin-button submit-text="新增项目" @click="router.push('/project-add')" class="submit" />
     </div>
 </template>

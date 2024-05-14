@@ -21,3 +21,15 @@ export const userInfo = data => {
         data
     });
 };
+/**
+ *
+ * @param {发送短信} data
+ * @returns
+ */
+export const sendSMS = data => {
+    return serviceAxios({
+        url: '/comm/sms/get_verification_code',
+        method: 'get',
+        params: data
+    });
+};

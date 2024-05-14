@@ -5,7 +5,10 @@
 -->
 <template>
     <div class="container bg-color">
-        <fin-project-card v-for="item in dataList" :key="item" />
+        <div v-if="dataList.length > 0" class="content-box">
+            <fin-project-card v-for="item in dataList" :key="item" from="history" :data="item" />
+        </div>
+        <van-empty v-else description="暂无数据" />
     </div>
 </template>
 
@@ -13,6 +16,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
+import api from '@/api';
 defineProps({});
 /**
  * 仓库
@@ -30,10 +34,20 @@ const router = useRouter();
 /**
  * 数据部分
  */
-const dataList = ref([1, 2, 3, 4, 5, 6, 7, 8]);
-const data = reactive({});
+const dataList = ref([]);
+
+const initList = () => {
+    api.getApplyBackletterList()
+        .then(res => {
+            dataList.value = res.data.lists;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 onMounted(() => {
     //console.log('3.-组件挂载到页面之后执行-------onMounted')
+    initList();
 });
 </script>
 <style scoped lang="scss">

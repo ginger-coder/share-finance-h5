@@ -71,20 +71,21 @@ const onLogin = async () => {
         return false;
     }
     isLoading.value = true;
-    const res = await api.login({
+    api.login({
         account: loginParams.account,
         password: loginParams.password
-    });
-    if (res) {
-        showSuccessToast('登录成功');
-        setCache(CacheToken, res.data, true);
-        setTimeout(() => {
+    })
+        .then(res => {
+            showSuccessToast('登录成功');
+            setCache(CacheToken, res.data, true);
+            setTimeout(() => {
+                isLoading.value = false;
+                router.replace('/');
+            }, 2000);
+        })
+        .catch(() => {
             isLoading.value = false;
-            router.replace('/');
-        }, 2000);
-    } else {
-        isLoading.value = false;
-    }
+        });
 };
 </script>
 <style scoped lang="scss">

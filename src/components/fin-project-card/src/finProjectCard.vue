@@ -37,13 +37,16 @@
             >
                 立即申请
             </div>
-            <!-- <div class="card-status">
+            <div v-if="props.from == 'history'" class="card-status">
                 <img src="@/assets/images/icon-pass.png" alt="" />
-            </div> -->
+            </div>
         </div>
         <div class="card-footer-box flex-row justify-between align-center">
             <span class="card-footer-time">最近申请时间：2024.04.07</span>
             <span class="card-footer-company">{{ props.data.names }}</span>
+        </div>
+        <div v-if="props.from == 'history'" class="card-iback-box" @click="onBackOrder">
+            <div class="iback-btn">撤销</div>
         </div>
     </fin-card>
 </template>
@@ -64,6 +67,10 @@ const props = defineProps({
         default: 'home'
     }
 });
+
+const onBackOrder = () => {
+    // 撤销
+};
 
 // eslint-disable-next-line camelcase
 const guarantee_amount_range = computed(() => {
@@ -169,6 +176,24 @@ onMounted(() => {
             color: #ffffff;
         }
     }
+    .card-iback-box {
+        padding: 12px 0 0;
+        display: flex;
+        justify-content: flex-end;
+        .iback-btn {
+            width: 76px;
+            height: 26px;
+            background: linear-gradient(180deg, #654ee6 0%, #3526c9 100%);
+            box-shadow: 0px 2px 4px 0px rgba(53, 38, 201, 0.5);
+            border-radius: 18px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #ffffff;
+            text-align: center;
+            line-height: 26px;
+        }
+    }
+
     .card-footer-box {
         padding-top: 10px;
         font-weight: 400;

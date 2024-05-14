@@ -3,22 +3,6 @@ import serviceAxios from '@/utils/request';
 import serverConfig from '@/utils/config';
 import { getToken } from '@/utils/cache';
 
-export const saveUserInfo = data => {
-    return serviceAxios({
-        url: '/user/ums/intention',
-        method: 'post',
-        data
-    });
-};
-
-export const sendSMS = data => {
-    return serviceAxios({
-        url: '/auth/sms/sendSms',
-        method: 'GET',
-        params: data
-    });
-};
-
 export const getProductList = data => {
     return serviceAxios({
         url: '/company/product/list',
@@ -84,6 +68,26 @@ export const getProjectInfo = data => {
 export const getProductInfo = data => {
     return serviceAxios({
         url: '/company/product/info',
+        method: 'GET',
+        params: data
+    });
+};
+/**
+ * 下拉项目列表
+ */
+export const getOptionProjectList = data => {
+    return serviceAxios({
+        url: '/company/project/list',
+        method: 'GET',
+        params: data
+    });
+};
+/**
+ * 申请记录列表
+ */
+export const getApplyBackletterList = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/list',
         method: 'GET',
         params: data
     });
