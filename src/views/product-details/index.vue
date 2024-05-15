@@ -92,7 +92,7 @@
                 </div>
             </div>
         </fin-card>
-        <fin-button submit-text="提交" />
+        <fin-button submit-text="提交申请" @click="handleSubmit" />
     </div>
 </template>
 
@@ -146,6 +146,9 @@ const init = () => {
     api.getProductInfo({ prodno: route.query.prodno }).then(res => {
         data.value = res.data;
     });
+};
+const handleSubmit = () => {
+    router.push('/product-apply?prodno=' + data.value.prodno);
 };
 onMounted(() => {
     init();

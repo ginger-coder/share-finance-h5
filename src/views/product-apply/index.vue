@@ -33,9 +33,7 @@
                     </van-step>
                 </van-steps>
             </div>
-            <div class="content-box flex-col">
-                <router-view />
-            </div>
+            <router-view />
         </div>
     </div>
 </template>

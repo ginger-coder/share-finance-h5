@@ -102,3 +102,34 @@ export const applyBackletterReCall = data => {
         params: data
     });
 };
+
+/**
+ * 发起申请-提交材料
+ */
+export const applyBackletterCreate = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/create',
+        method: 'POST',
+        data: data
+    });
+};
+/**
+ * 发起申请-获取协议内容
+ */
+export const applyBackletterQueryProtocol = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/query_protocol',
+        method: 'GET',
+        params: data
+    });
+};
+/**
+ * 发起申请-提交协议
+ */
+export const applyBackletterSubmitProtocol = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/submit_protocol',
+        method: 'POST',
+        data: data
+    });
+};

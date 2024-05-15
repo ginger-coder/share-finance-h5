@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import eslintPlugin from 'vite-plugin-eslint';
+import vitePluginRequire from 'vite-plugin-require';
 import Components from 'unplugin-vue-components/vite';
 // vant插件
 import { VantResolver } from 'unplugin-vue-components/resolvers';
@@ -41,7 +42,8 @@ export default ({ mode }) => {
                     maxLogNumber: 1000,
                     theme: 'dark'
                 }
-            })
+            }),
+            vitePluginRequire()
         ],
         resolve: {
             alias: {

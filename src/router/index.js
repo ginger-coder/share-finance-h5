@@ -103,6 +103,14 @@ const routes = [
                     import(
                         /* webpackChunkName: 'ApplicationBookProtocol' */ '@/views/product-apply/book-protocol/index.vue'
                     )
+            },
+            {
+                path: 'pay',
+                name: 'pay',
+                component: () =>
+                    import(
+                        /* webpackChunkName: 'ApplicationBookPay' */ '@/views/product-apply/pay-wait/index.vue'
+                    )
             }
         ]
     }

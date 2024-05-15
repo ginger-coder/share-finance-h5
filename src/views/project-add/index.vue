@@ -60,7 +60,6 @@
                     @click="handleOpenTime"
                 />
                 <van-uploader
-                    v-model="fileList"
                     :before-read="beforeRead"
                     accept=".pdf"
                     :after-read="afterRead"
@@ -135,7 +134,7 @@ const beforeRead = file => {
     formData.append('filePath', 'tmp/pdf');
     api.uploadFile2path(formData).then(res => {
         // eslint-disable-next-line camelcase
-        productParams.bidding_document = res.data.urlList[0] || '';
+        productParams.bidding_document = res.data.url_list[0] || '';
     });
 };
 

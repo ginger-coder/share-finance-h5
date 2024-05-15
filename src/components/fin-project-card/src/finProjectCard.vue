@@ -14,7 +14,7 @@
                 <van-text-ellipsis class="title-text flex_1" :content="props.data.names" />
             </div>
             <div class="card-title-money">
-                <span class="card-money">{{ props.data.minimum_amount }}</span>
+                <span class="card-money">{{ moneyFormat(props.data.minimum_amount) }}</span>
                 <span class="card-tip">起</span>
             </div>
         </div>
@@ -47,11 +47,24 @@
                 "
                 class="card-status"
             >
-                <img :src="'@/assets/images/' + icons[props.data.isauth] + '.png'" alt="" />
+                <img v-if="props.data.isauth == 1" src="@/assets/images/icon-pass.png" alt="" />
+                <img
+                    v-else-if="props.data.isauth == 4"
+                    src="@/assets/images/icon-audit.png"
+                    alt=""
+                />
+                <img v-else-if="props.data.isauth == 8" src="@/assets/images/icon-pay.png" alt="" />
+                <img
+                    v-else-if="props.data.isauth == 9"
+                    src="@/assets/images/icon-reject.png"
+                    alt=""
+                />
             </div>
         </div>
         <div class="card-footer-box flex-row justify-between align-center">
-            <span class="card-footer-time">最近申请时间：2024.04.07</span>
+            <span class="card-footer-time">
+                {{ props.data.tim ? '最近申请时间：' + timeFormat(props.data.tim) : '' }}
+            </span>
             <span class="card-footer-company">{{ props.data.names }}</span>
         </div>
         <div
@@ -69,6 +82,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 import { showToast, showSuccessToast } from 'vant';
+import { timeFormat, moneyFormat } from '@/utils';
 import api from '@/api';
 const props = defineProps({
     data: {
@@ -83,16 +97,12 @@ const props = defineProps({
     }
 });
 
-const icons = {
-    1: 'icon-pass',
-    4: 'icon-audit',
-    9: 'icon-reject',
-    8: 'icon-pay'
-};
+const emits = defineEmits('refresh');
 
 const onBackOrder = () => {
     // 撤销
     api.applyBackletterReCall({ applyno: props.data.prodno }).then(() => {
+        emits('refresh');
         showSuccessToast('撤销成功');
     });
 };

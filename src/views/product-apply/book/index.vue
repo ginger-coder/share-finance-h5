@@ -5,32 +5,40 @@
 -->
 <template>
     <div class="book-container flex-column">
-        <van-field
-            v-model="projectLabel"
-            is-link
-            readonly
-            placeholder="请选择要关联的项目"
-            @click="showPicker = true"
-        />
-        <div class="upload-box">
-            <div class="upload-title align-center">申请材料</div>
-            <div class="upload-content">
-                <div class="upload-card">
-                    <div class="upload-card-title">上传材料</div>
-                    <div class="upload-card-tip">支持上传文件为：pdf</div>
-                    <div class="upload-card-button">立即上传</div>
-                </div>
-                <div class="upload-file-box">
-                    <div class="upload-file-item">
-                        <div class="upload-file-icon">
-                            <img src="@/assets/images/icon-file.png" alt="" />
-                        </div>
-                        <div class="upload-file-content">
-                            <div class="file-name">文件名称</div>
-                            <div class="file-size">10M</div>
-                        </div>
-                        <div class="upload-file-delete">
-                            <img src="@/assets/images/icon-delete.png" alt="" />
+        <div class="book-content-bg">
+            <van-field
+                v-model="projectLabel"
+                is-link
+                readonly
+                placeholder="请选择要关联的项目"
+                @click="showPicker = true"
+            />
+            <div class="upload-box">
+                <div class="upload-title align-center">申请材料</div>
+                <div class="upload-content">
+                    <div class="upload-card">
+                        <div class="upload-card-title">上传材料</div>
+                        <div class="upload-card-tip">支持上传文件为：pdf</div>
+                        <van-uploader :before-read="beforeRead" accept=".pdf" :max-count="1">
+                            <div class="upload-card-button">立即上传</div>
+                        </van-uploader>
+                    </div>
+                    <div class="upload-file-box">
+                        <div v-for="item in fileList" :key="item.uid" class="upload-file-item">
+                            <div class="flex-row flex_1">
+                                <div class="upload-file-icon">
+                                    <img src="@/assets/images/icon-file.png" alt="" />
+                                </div>
+                                <div class="upload-file-content flex_1">
+                                    <div class="file-name">
+                                        <van-text-ellipsis :content="item.name" />
+                                    </div>
+                                    <div class="file-size">{{ item.size }}</div>
+                                </div>
+                            </div>
+                            <div class="upload-file-delete" @click="delFile(item)">
+                                <img src="@/assets/images/icon-delete.png" alt="" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,6 +63,9 @@ import { ref, reactive, onMounted } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 import api from '@/api';
+import { v4 as uuidv4 } from 'uuid';
+import { getfilesize } from '@/utils';
+import { showToast } from 'vant';
 defineProps({});
 /**
  * 仓库
@@ -73,9 +84,6 @@ const router = useRouter();
  * 数据部分
  */
 
-//  上传
-const fileList = ref([]);
-
 const columns = ref([]);
 const showPicker = ref(false);
 const projectValue = ref('');
@@ -86,8 +94,50 @@ const onConfirm = value => {
     projectLabel.value = value.selectedOptions[0].names;
 };
 const onNext = () => {
-    router.push('/product-apply/protocol');
+    if (!projectValue.value) {
+        showToast('请选择要关联的项目');
+        return false;
+    }
+    if (!fileList.value.length) {
+        showToast('请上传申请材料');
+        return false;
+    }
+    api.applyBackletterCreate({
+        projno: projectValue.value,
+        prodno: route.query.prodno,
+        company_meterials: fileList.value
+    }).then(res => {
+        showToast('申请成功');
+        setTimeout(() => {
+            router.push('/product-apply/protocol?applyno=' + res.data.applyno);
+        }, 1000);
+    });
+    // router.push('/product-apply/protocol');
 };
+
+//  上传
+const fileList = ref([]);
+
+const delFile = file => {
+    fileList.value = fileList.value.filter(el => {
+        return file.uid !== el.uid;
+    });
+};
+
+const beforeRead = file => {
+    let formData = new FormData(); // 为上传文件定义一个formData对象
+    formData.append('file', file);
+    formData.append('filePath', 'tmp/pdf');
+    api.uploadFile2path(formData).then(res => {
+        fileList.value.push({
+            uid: uuidv4(),
+            name: file.name,
+            size: getfilesize(file.size),
+            mater_file: res.data.url_list[0] || ''
+        });
+    });
+};
+
 const customFieldName = {
     text: 'names',
     value: 'projno'
@@ -103,8 +153,17 @@ onMounted(() => {
 </script>
 <style scoped lang="scss">
 .book-container {
-    flex: 1;
+    height: calc(100% - 130px);
     position: relative;
+    .book-content-bg {
+        background: #ffffff;
+        box-shadow: inset 3px 3px 20px 0px rgba(53, 38, 201, 0.2);
+        border-radius: 12px;
+        min-height: calc(100% - 50px);
+        height: calc(100% - 50px);
+        padding: 16px;
+        overflow-y: auto;
+    }
     .footer-box {
         position: absolute;
         left: 0;
@@ -163,6 +222,7 @@ onMounted(() => {
             }
         }
         .upload-file-box {
+            padding: 12px 0;
             .upload-file-item {
                 background: rgba(244, 242, 249, 0.3);
                 border-radius: 6px;
@@ -171,6 +231,36 @@ onMounted(() => {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                margin-bottom: 12px;
+                .upload-file-icon {
+                    width: 34px;
+                    height: 34px;
+                    margin-right: 15px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .upload-file-content {
+                    .file-name {
+                        font-weight: 400;
+                        font-size: 13px;
+                        color: #0a1629;
+                    }
+                    .file-size {
+                        font-weight: 400;
+                        font-size: 12px;
+                        color: #91929e;
+                    }
+                }
+                .upload-file-delete {
+                    width: 20px;
+                    height: 20px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
             }
         }
     }

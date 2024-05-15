@@ -6,7 +6,13 @@
 <template>
     <div class="container bg-color">
         <div v-if="dataList.length > 0" class="content-box">
-            <fin-project-card v-for="item in dataList" :key="item" from="history" :data="item" />
+            <fin-project-card
+                v-for="item in dataList"
+                :key="item"
+                from="history"
+                :data="item"
+                @refresh="initList"
+            />
         </div>
         <van-empty v-else description="暂无数据" />
     </div>
@@ -39,7 +45,12 @@ const dataList = ref([]);
 const initList = () => {
     api.getApplyBackletterList()
         .then(res => {
-            dataList.value = res.data.lists;
+            dataList.value = res.data.lists.map(el => {
+                return {
+                    ...el,
+                    ...el.products
+                };
+            });
         })
         .catch(err => {
             console.log(err);
