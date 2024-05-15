@@ -12,6 +12,7 @@
                 from="history"
                 :data="item"
                 @refresh="initList"
+                @info="getApplyInfo"
             />
         </div>
         <van-empty v-else description="暂无数据" />
@@ -40,6 +41,18 @@ const router = useRouter();
 /**
  * 数据部分
  */
+
+const getApplyInfo = (applyno, page) => {
+    store.initApplyInfo(applyno).then(() => {
+        router.push({
+            path: '/product-apply/book',
+            query: {
+                applyno
+            }
+        });
+    });
+};
+
 const dataList = ref([]);
 
 const initList = () => {

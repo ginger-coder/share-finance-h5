@@ -5,10 +5,7 @@
 -->
 <template>
     <fin-card class="card-item">
-        <div
-            class="card-title flex-row align-center"
-            @click="router.push('/product-details?prodno=' + props.data.prodno)"
-        >
+        <div class="card-title flex-row align-center">
             <div class="card-title-box flex-row align-center flex_1">
                 <div class="title-tip flex-row align-center justify-center">保函</div>
                 <van-text-ellipsis class="title-text flex_1" :content="props.data.names" />
@@ -18,7 +15,7 @@
                 <span class="card-tip">起</span>
             </div>
         </div>
-        <div class="card-center-box flex-row align-center justify-between">
+        <div class="card-center-box flex-row align-center justify-between" @click="handleInfo">
             <div class="card-center-left flex-row align-center justify-between">
                 <div class="card-center-money flex-col">
                     <span class="card-center-tip">保函金额</span>
@@ -97,11 +94,20 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits('refresh');
+const emits = defineEmits('refresh', 'info');
+
+const handleInfo = () => {
+    if (props.from === 'history') {
+        emits('info', props.data.applyno);
+    } else {
+        router.push('/product-info?prodno=' + props.data.prodno);
+    }
+    // 详情
+};
 
 const onBackOrder = () => {
     // 撤销
-    api.applyBackletterReCall({ applyno: props.data.prodno }).then(() => {
+    api.applyBackletterReCall({ applyno: props.data.applyno }).then(() => {
         emits('refresh');
         showSuccessToast('撤销成功');
     });

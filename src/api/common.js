@@ -133,3 +133,13 @@ export const applyBackletterSubmitProtocol = data => {
         data: data
     });
 };
+/**
+ * 发起申请-详情
+ */
+export const applyBackletterInfo = data => {
+    return serviceAxios({
+        url: '/console/apply_backletter/info',
+        method: 'GET',
+        params: data
+    });
+};

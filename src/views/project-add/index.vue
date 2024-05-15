@@ -88,7 +88,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { showToast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import api from '@/api';
@@ -128,14 +128,24 @@ const afterRead = file => {
     console.log('file', file);
 };
 const beforeRead = file => {
+    showLoadingToast({
+        message: '上传中...',
+        forbidClick: false,
+        loadingType: 'spinner'
+    });
     let formData = new FormData(); // 为上传文件定义一个formData对象
     fileName.value = file.name; // 将选中的上传文件转化为二进制文件，显示在页面上
     formData.append('file', file);
     formData.append('filePath', 'tmp/pdf');
-    api.uploadFile2path(formData).then(res => {
-        // eslint-disable-next-line camelcase
-        productParams.bidding_document = res.data.url_list[0] || '';
-    });
+    api.uploadFile2path(formData)
+        .then(res => {
+            // eslint-disable-next-line camelcase
+            closeToast();
+            productParams.bidding_document = res.data.url_list[0] || '';
+        })
+        .catch(() => {
+            closeToast();
+        });
 };
 
 const handleSave = () => {

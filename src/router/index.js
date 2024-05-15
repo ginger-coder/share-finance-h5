@@ -76,10 +76,10 @@ const routes = [
             import(/* webpackChunkName: 'ProjectAdd' */ '@/views/project-add/index.vue')
     },
     {
-        path: '/application-list',
-        name: 'application-list',
+        path: '/apply-list',
+        name: 'apply-list',
         component: () =>
-            import(/* webpackChunkName: 'ApplicationList' */ '@/views/application-list/index.vue')
+            import(/* webpackChunkName: 'ApplicationList' */ '@/views/apply-list/index.vue')
     },
     {
         path: '/product-apply',

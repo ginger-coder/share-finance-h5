@@ -27,7 +27,7 @@
             <van-empty v-else description="暂无数据" />
         </div>
         <footer-view />
-        <div class="badge-box" @click="router.push('/center')">
+        <div class="badge-box" @click="router.push('/center')" v-if="false">
             <img src="@/assets/images/index/icon-index-center.png" alt="" />
             <van-badge :content="store.state.count.passed_count" max="99" class="badge" />
         </div>
@@ -148,9 +148,9 @@ onMounted(() => {
         overflow: hidden;
         .scroll-box {
             border-radius: 12px;
-            height: calc(100% - 52px);
+            height: calc(100% - 55px);
             overflow-y: auto;
-            padding-bottom: 32px;
+            padding-bottom: 55px;
         }
         .header {
             padding: 12px 20px;

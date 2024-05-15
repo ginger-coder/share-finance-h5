@@ -65,7 +65,7 @@ import { useRoute, useRouter } from 'vue-router';
 import api from '@/api';
 import { v4 as uuidv4 } from 'uuid';
 import { getfilesize } from '@/utils';
-import { showToast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 defineProps({});
 /**
  * 仓库
@@ -83,7 +83,6 @@ const router = useRouter();
 /**
  * 数据部分
  */
-
 const columns = ref([]);
 const showPicker = ref(false);
 const projectValue = ref('');
@@ -102,16 +101,24 @@ const onNext = () => {
         showToast('请上传申请材料');
         return false;
     }
+    showLoadingToast({
+        message: '正在申请中...',
+        forbidClick: false,
+        loadingType: 'spinner'
+    });
     api.applyBackletterCreate({
         projno: projectValue.value,
         prodno: route.query.prodno,
         company_meterials: fileList.value
-    }).then(res => {
-        showToast('申请成功');
-        setTimeout(() => {
-            router.push('/product-apply/protocol?applyno=' + res.data.applyno);
-        }, 1000);
-    });
+    })
+        .then(res => {
+            closeToast();
+            showToast('申请成功');
+            setTimeout(() => {
+                router.push('/product-apply/protocol?applyno=' + res.data.applyno);
+            }, 1000);
+        })
+        .catch(() => {});
     // router.push('/product-apply/protocol');
 };
 
@@ -123,19 +130,28 @@ const delFile = file => {
         return file.uid !== el.uid;
     });
 };
-
 const beforeRead = file => {
     let formData = new FormData(); // 为上传文件定义一个formData对象
     formData.append('file', file);
     formData.append('filePath', 'tmp/pdf');
-    api.uploadFile2path(formData).then(res => {
-        fileList.value.push({
-            uid: uuidv4(),
-            name: file.name,
-            size: getfilesize(file.size),
-            mater_file: res.data.url_list[0] || ''
-        });
+    showLoadingToast({
+        message: '上传中...',
+        forbidClick: false,
+        loadingType: 'spinner'
     });
+    api.uploadFile2path(formData)
+        .then(res => {
+            closeToast();
+            fileList.value.push({
+                uid: uuidv4(),
+                name: file.name,
+                size: getfilesize(file.size),
+                mater_file: res.data.url_list[0] || ''
+            });
+        })
+        .catch(() => {
+            closeToast();
+        });
 };
 
 const customFieldName = {

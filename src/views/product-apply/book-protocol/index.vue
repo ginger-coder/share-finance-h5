@@ -17,7 +17,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useAppStore } from '@/store';
 import { useRoute, useRouter } from 'vue-router';
 import api from '@/api';
-import { showSuccessToast } from 'vant';
+import { showSuccessToast, closeToast, showLoadingToast } from 'vant';
 defineProps({});
 /**
  * 仓库
@@ -40,17 +40,24 @@ let falg = true;
 const onNext = () => {
     if (falg) {
         falg = false;
+        showLoadingToast({
+            message: '提交中...',
+            forbidClick: false,
+            loadingType: 'spinner'
+        });
         api.applyBackletterSubmitProtocol({
             applyno: route.query.applyno
         })
             .then(() => {
+                closeToast();
                 showSuccessToast('提交成功');
                 setTimeout(() => {
                     falg = true;
-                    router.replace('/');
+                    router.replace('/apply-list');
                 }, 1000);
             })
             .catch(() => {
+                closeToast();
                 falg = true;
             });
     }

@@ -39,10 +39,7 @@
                     <div class="list-item-title">项目管理</div>
                     <div class="list-item-tip">管理项目信息</div>
                 </div>
-                <div
-                    class="content-list-item history-item"
-                    @click="router.push('/application-list')"
-                >
+                <div class="content-list-item history-item" @click="router.push('/apply-list')">
                     <div class="list-item-icon">
                         <img src="@/assets/images/center/icon-center-history.png" alt="" />
                     </div>
