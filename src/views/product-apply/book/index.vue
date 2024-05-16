@@ -6,7 +6,13 @@
 <template>
     <div class="book-container flex-column">
         <div class="book-content-bg">
+            <div
+                v-if="!columns.length"
+                class="empty-product-box"
+                @click="router.push('/project-add')"
+            ></div>
             <van-field
+                v-else
                 v-model="projectLabel"
                 is-link
                 readonly
@@ -186,6 +192,12 @@ onMounted(() => {
         bottom: 0;
         right: 0;
     }
+}
+.empty-product-box {
+    width: 100%;
+    height: 73px;
+    background: url('@/assets/images/icon-default-create.png') no-repeat;
+    background-size: 100% 100%;
 }
 .upload-box {
     padding: 16px;
